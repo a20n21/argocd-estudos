@@ -1,15 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
-  - deployment.yaml
-  - service.yaml
-
+- deployment.yaml
+- service.yaml
 namespace: goapp
-
 images:
-  - name: goapp
-    newName: matias1210/argocd-estudos
-    newTag: latest
-
-  
+- name: goapp
+  newName: matias1210/argocd-estudos
+  newTag: 2a91f2fbe73a3a2fc5f6df4a07605c93808537ed
