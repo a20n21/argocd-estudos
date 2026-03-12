@@ -23,4 +23,36 @@ jobs:
         with:
           context: .
           push: true
-          tags: matias1210/argocd-estudos:latest
+          tags: matias1210/argocd-estudos:${{ github.sha }}
+
+  deploy: 
+    name: Deploy 
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: kustomize
+        uses: imranismail/setup-kustomize@v2
+        with: 
+          kustomize.version: v3.6.1
+
+      - name: update k8s 
+        run: |
+          cd k8s
+          kustomize edit set image goapp=matias1210/argocd-estudos:${{ github.sha }}
+          cat kustomization.yaml
+
+      - name: commit
+        run:
+          git config --local user.email " action@github.com "
+          git config --local user.name "Deploy Action"
+          git commit -am "change image tag"
+
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
