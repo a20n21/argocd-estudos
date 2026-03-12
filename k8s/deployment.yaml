@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: goapp
-          image: matias1210/argocd-estudos
+          image: goapp
           resources:
             limits:
               memory: "128Mi"
