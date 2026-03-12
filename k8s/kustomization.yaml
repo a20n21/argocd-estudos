@@ -7,4 +7,4 @@ namespace: goapp
 images:
 - name: goapp
   newName: matias1210/argocd-estudos
-  newTag: 2a91f2fbe73a3a2fc5f6df4a07605c93808537ed
+  newTag: 4234723131eb52b82fcaa22bd33d7af4e7f9ddd8
