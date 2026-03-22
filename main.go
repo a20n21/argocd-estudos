@@ -1,15 +1,16 @@
-package main
-
 import (
-	"net/http"
+    "net/http"
+    "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
+   
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("Hello ARGOCD, foram feitas novas alterações nessa aplicação"))
+    })
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("<h1>Hello ARGOCD, foram feitas novas alerações nessa aplicação</h1>"))
-	})
+    
+    http.Handle("/metrics", promhttp.Handler())
 
-	http.ListenAndServe(":8080", nil)
-
+    http.ListenAndServe(":8080", nil)
 }
