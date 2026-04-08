@@ -56,9 +56,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Deploy Action"
+          git pull origin main --rebase
           git diff --quiet || git commit -am "change image tag"
 
       - name: Push
         uses: ad-m/github-push-action@v0.6.0   
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
