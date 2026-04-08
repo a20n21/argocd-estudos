@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: goapp
+  namespace: goapp
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: goapp
+  namespaceSelector:
+    matchNames:
+      - goapp
+  endpoints:
+    - port: http
+      interval: 15s
+      path: /metrics
