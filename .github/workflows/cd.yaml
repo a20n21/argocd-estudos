@@ -8,8 +8,27 @@ permissions:
   contents: write
 
 jobs:
+
+  sonar:
+    name: SonarQube Analysis
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Sonar Scanner
+        run: |
+          /opt/sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey=goapp \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://192.168.100.6:9000 \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+  
   build:
     runs-on: self-hosted
+    needs: sonar   
 
     steps:
       - name: Checkout
@@ -31,9 +50,10 @@ jobs:
           push: true
           tags: matias1210/argocd-estudos:${{ github.sha }}
 
+  
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest   
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
@@ -59,7 +79,7 @@ jobs:
           git diff --quiet || git commit -am "change image tag"
 
       - name: Push
-        uses: ad-m/github-push-action@v0.6.0   
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
