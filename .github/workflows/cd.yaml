@@ -24,7 +24,7 @@ jobs:
             -Dsonar.sources=. \
             -Dsonar.host.url=http://192.168.100.6:9000 \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.branch.name=main
+            
 
   build:
     name: Build & Push Docker Image
