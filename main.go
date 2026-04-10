@@ -16,10 +16,19 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
+// 👉 Função separada (testável)
+func PingHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "pong")
+}
+
+// 👉 Função separada (testável)
+func RootHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello ARGOCD + Jaeger + OpenTelemetry 🚀")
+}
+
 func initTracer() func(context.Context) error {
 	ctx := context.Background()
 
-	// 👇 seu Jaeger Collector no Kubernetes
 	exporter, err := otlptracehttp.New(ctx,
 		otlptracehttp.WithEndpoint("simple-collector.observability.svc:4318"),
 		otlptracehttp.WithInsecure(),
@@ -51,17 +60,10 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// endpoint principal
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello ARGOCD + Jaeger + OpenTelemetry 🚀")
-	})
+	// 👉 usando funções separadas
+	mux.HandleFunc("/", RootHandler)
+	mux.HandleFunc("/ping", PingHandler)
 
-	// endpoint de teste de carga
-	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "pong")
-	})
-
-	// instrumenta HTTP automaticamente
 	handler := otelhttp.NewHandler(mux, "goapp-http")
 
 	log.Println("🚀 server running on :8080")

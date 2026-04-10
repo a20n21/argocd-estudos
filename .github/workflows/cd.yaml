@@ -17,6 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Run tests with coverage
+        run: |
+          go test ./... -coverprofile=coverage.out
+
       - name: Run Sonar Scanner
         run: |
           /opt/sonar-scanner/bin/sonar-scanner \
