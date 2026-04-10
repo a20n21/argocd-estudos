@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: goapp
-          image: matias1210/argocd-estudos:latest
-          imagePullPolicy: IfNotPresent
+          image: matias1210/goapp:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources:
