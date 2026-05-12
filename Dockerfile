@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . .
 
-# 👇 ISSO RESOLVE TUDO
+
 RUN go mod init argocd-estudos || true
 RUN go mod tidy
 
